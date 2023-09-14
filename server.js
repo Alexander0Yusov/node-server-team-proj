@@ -1,17 +1,21 @@
-const mongoose = require("mongoose");
-const app = require("./app");
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-const { DB_HOST, PORT = 3000 } = process.env;
-
-mongoose.set("strictQuery", true);
+const server = require('./App');
+const { DB_HOST, PORT } = process.env;
 
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(PORT);
-    console.log("Database connection successful");
+    server.listen(PORT);
+    console.log('Database connection successful');
   })
-  .catch((er) => {
-    console.log(er.message);
+  .catch(error => {
+    console.log(error.message);
     process.exit(1);
   });
+
+// tdlLdWkpg4MiGAyO - pass, user - login
+// add collection on 30-00 min mod-3 les-1
+// 1-15 deploy onrender
+// 03-37 proj planning about cloudinary

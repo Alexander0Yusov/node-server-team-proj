@@ -12,7 +12,7 @@ const { addUser, findUser, getRoomsUsers, removeUser } = require('./users');
 
 const io = useSocket(server, {
   cors: {
-    origin: '*'
+    origin: '*',
   },
 });
 
@@ -22,8 +22,8 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 
-app.use('/chat/users', authRouter);
-app.use('/chat/messages', messageRouter);
+app.use('/api/users', authRouter);
+app.use('/api/messages', messageRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

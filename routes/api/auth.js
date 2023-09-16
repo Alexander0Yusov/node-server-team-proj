@@ -8,7 +8,6 @@ const { schemas } = require('../../models/user');
 router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
 router.post('/logout', authenticate, ctrl.logout);
-
 router.get('/current', authenticate, ctrl.getCurrent);
 
 router.patch(
@@ -17,5 +16,7 @@ router.patch(
   upload.single('avatar'),
   ctrl.updateAvatar
 );
+
+router.patch('/current', authenticate, upload.single('avatar'), ctrl.patchUser);
 
 module.exports = router;

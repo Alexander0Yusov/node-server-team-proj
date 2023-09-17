@@ -69,7 +69,7 @@ const bodyParamsSchema = new Schema({
     required: true,
     immutable: true,
   },
-  BMR: {
+  bmr: {
     type: Number,
     default: 1500,
     required: true,

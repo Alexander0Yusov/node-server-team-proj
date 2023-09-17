@@ -183,7 +183,7 @@ const patchUser = async (req, res) => {
     const updatedBodyParams = {
       ...parsedPrevBodyParams,
       ...parsedIncomingBodyParams,
-      BMR: calcBmr({ ...parsedPrevBodyParams, ...parsedIncomingBodyParams }),
+      bmr: calcBmr({ ...parsedPrevBodyParams, ...parsedIncomingBodyParams }),
     };
 
     userData.bodyParams = updatedBodyParams;

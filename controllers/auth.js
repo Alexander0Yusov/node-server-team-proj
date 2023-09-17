@@ -198,6 +198,7 @@ const patchUser = async (req, res) => {
   res.json({
     user: {
       name: updatedUser.name,
+      email: updatedUser.email,
       avatarURL: updatedUser.avatarURL,
       bodyParams: updatedUser.bodyParams,
     },

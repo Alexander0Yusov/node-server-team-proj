@@ -6,7 +6,12 @@ const bcrypt = require('bcrypt');
 const jimp = require('jimp');
 const cloudinary = require('cloudinary').v2;
 
-const { HttpError, ctrlWrapper, calcBmr } = require('../helpers');
+const {
+  HttpError,
+  ctrlWrapper,
+  calcBmr,
+  isDefaultParams,
+} = require('../helpers');
 const { User } = require('../models/user');
 const { SECRET_KEY, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
 
@@ -184,7 +189,12 @@ const patchUser = async (req, res) => {
       ...parsedPrevBodyParams,
       ...parsedIncomingBodyParams,
       bmr: calcBmr({ ...parsedPrevBodyParams, ...parsedIncomingBodyParams }),
+      defaultParams: false,
     };
+
+    if (isDefaultParams(updatedBodyParams)) {
+      updatedBodyParams.defaultParams = true;
+    }
 
     userData.bodyParams = updatedBodyParams;
   }

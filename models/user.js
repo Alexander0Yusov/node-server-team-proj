@@ -71,7 +71,7 @@ const bodyParamsSchema = new Schema({
   },
   bmr: {
     type: Number,
-    default: 1500,
+    default: 2280,
     required: true,
   },
   defaultParams: {

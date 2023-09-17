@@ -20,7 +20,6 @@ const isDefaultParams = compareObj => {
   delete compareObj.birthdate;
 
   const keys = Object.keys(defaultBodyParams);
-  console.log(keys);
 
   for (let i = 0; i < keys.length; i++) {
     const prop = keys[i];

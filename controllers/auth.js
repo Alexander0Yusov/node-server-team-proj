@@ -80,6 +80,7 @@ const login = async (req, res) => {
       name: user.name,
       email: user.email,
       avatarURL: user.avatarURL,
+      bodyParams: user.bodyParams,
     },
     token,
   });
@@ -101,9 +102,9 @@ const getCurrent = async (req, res) => {
       name,
       email,
       avatarURL,
-      token,
       bodyParams,
     },
+    token,
   });
 };
 

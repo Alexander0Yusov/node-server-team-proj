@@ -4,7 +4,8 @@ const Joi = require('joi');
 const { handleMongooseError } = require('../helpers');
 
 const validEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-const validPassword = /^(?=.*[a-zA-Z]{6})(?=.*\d)[a-zA-Z\d]{7}$/;
+const validPassword =
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/;
 
 const bodyParamsSchema = new Schema({
   _id: false,
@@ -110,22 +111,32 @@ userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
-  email: Joi.string().pattern(new RegExp(validEmail)).required(),
-  // .message('Please enter your email like sample example@domain.com'),
-  password: Joi.string().pattern(new RegExp(validPassword)).required(),
-  // .message('Password must contain 6 letters and 1 number'),
+  email: Joi.string().pattern(new RegExp(validEmail)).required().messages({
+    'any.required': 'Please enter your email like sample example@domain.com',
+  }),
+  password: Joi.string()
+    .pattern(new RegExp(validPassword))
+    .required()
+    .messages({
+      'any.required': 'Password must contain 6 letters and 1 number',
+    }),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(new RegExp(validEmail)).required(),
-  // .message('Please enter your email like sample example@domain.com'),
-  password: Joi.string().pattern(new RegExp(validPassword)).required(),
-  // .message('Password must contain 6 letters and 1 number'),
+  email: Joi.string().pattern(new RegExp(validEmail)).required().messages({
+    'any.required': 'Please enter your email like sample example@domain.com',
+  }),
+  password: Joi.string()
+    .pattern(new RegExp(validPassword))
+    .required()
+    .messages({
+      'any.required': 'Password must contain 6 letters and 1 number',
+    }),
 });
 
 const updateUserSchema = Joi.object({
   name: Joi.string().min(2).max(50).message('Min 2 and max 50 chars'),
-  email: Joi.string().forbidden(),
+  email: Joi.string().pattern(new RegExp(validEmail)),
   avatarURL: Joi.string(),
 
   bodyParams: Joi.object({
@@ -136,15 +147,17 @@ const updateUserSchema = Joi.object({
     birthdate: Joi.date()
       .min(new Date().getFullYear() - 18, 'now')
       .iso()
-      .raw(),
-    // .message('Error age'),
+      .raw()
+      .messages({
+        'any.required': 'Age error',
+      }),
 
     blood: Joi.number().valid(1, 2, 3, 4),
     sex: Joi.string().valid('male', 'female'),
     levelActivity: Joi.number().valid(1, 2, 3, 4, 5),
-    dailySportTime: Joi.number().forbidden(),
-    bmr: Joi.number().forbidden(),
-    defaultParams: Joi.boolean().forbidden(),
+    dailySportTime: Joi.number(),
+    bmr: Joi.number(),
+    defaultParams: Joi.boolean(),
   }),
 });
 

@@ -143,15 +143,9 @@ const updateUserSchema = Joi.object({
     height: Joi.number().min(150).max(250).integer(),
     currentWeight: Joi.number().min(35).max(300).integer(),
     desiredWeight: Joi.number().min(35).max(300).integer(),
-
-    birthdate: Joi.date()
-      .min(new Date().getFullYear() - 18, 'now')
-      .iso()
-      .raw()
-      .messages({
-        'any.required': 'Age error',
-      }),
-
+    birthdate: Joi.date().iso().messages({
+      'any.required': 'Please provide a valid ISO date.',
+    }),
     blood: Joi.number().valid(1, 2, 3, 4),
     sex: Joi.string().valid('male', 'female'),
     levelActivity: Joi.number().valid(1, 2, 3, 4, 5),

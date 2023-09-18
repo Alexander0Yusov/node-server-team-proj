@@ -3,8 +3,8 @@ const Joi = require('joi');
 
 const { handleMongooseError } = require('../helpers');
 
-const validEmail =
-  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const validEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+const validPassword = /^(?=.*[a-zA-Z]{6})(?=.*\d)[a-zA-Z\d]{7}$/;
 
 const bodyParamsSchema = new Schema({
   _id: false,
@@ -109,13 +109,26 @@ const userSchema = new Schema(
 userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
-  password: Joi.string().min(2).max(15).required(),
-  name: Joi.string().min(2).max(15).required(),
-  email: Joi.string().pattern(new RegExp(validEmail)).required(),
+  name: Joi.string().min(2).max(50).required(),
+  email: Joi.string()
+    .pattern(new RegExp(validEmail))
+    .required()
+    .message('Please enter your email like sample example@domain.com'),
+  password: Joi.string()
+    .pattern(new RegExp(validPassword))
+    .required()
+    .message('Password must contain 6 letters and 1 number'),
 });
+
 const loginSchema = Joi.object({
-  password: Joi.string().min(2).max(15).required(),
-  email: Joi.string().pattern(new RegExp(validEmail)).required(),
+  email: Joi.string()
+    .pattern(new RegExp(validEmail))
+    .required()
+    .message('Please enter your email like sample example@domain.com'),
+  password: Joi.string()
+    .pattern(new RegExp(validPassword))
+    .required()
+    .message('Password must contain 6 letters and 1 number'),
 });
 
 const schemas = { registerSchema, loginSchema };

@@ -1,0 +1,621 @@
+{
+  "openapi": "5.0.0",
+  "info": {
+    "version": "0.1",
+    "title": "Power Pulse API docs",
+    "description": "API documentation for project Power Pulse"
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    { "url": "https://node-server-team-proj.onrender.com/" }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User endpoints"
+    }
+  ],
+
+  "paths": {
+    "/api/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Email is already in use",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Sign in existing user",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Email or password invalid",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Info about user - get",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User"],
+        "summary": "Info about user - patch",
+        "parameters": [],
+        "requestBody": {
+          "description": "User's new info",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchCurrentUserRequest"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageFileRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatchCurrentUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing fields",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/avatars": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Avatar - patch",
+        "parameters": [],
+        "requestBody": {
+          "description": "Image file",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageFileRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatchAvatarResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password", "name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Olivia Lewis"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Olivia Lewis"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User's avatar URL",
+            "example": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e"
+          },
+          "bodyParams": {
+            "type": "object",
+            "description": "User's body params - empty object",
+            "example": {}
+          }
+        },
+        "example": {
+          "email": "user@mail.com",
+          "password": "qwerty123",
+          "name": "Olivia Lewis",
+          "avatarURL": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e",
+          "bodyParams": {}
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Olivia Lewis"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's avatar URL",
+                "example": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e"
+              },
+              "bodyParams": {
+                "type": "object",
+                "description": "User's body params",
+                "properties": {
+                  "height": {
+                    "type": "number",
+                    "description": "User's height",
+                    "example": 175
+                  },
+                  "currentWeight": {
+                    "type": "number",
+                    "description": "User's current weight",
+                    "example": 86
+                  },
+                  "desiredWeight": {
+                    "type": "number",
+                    "description": "User's desired weight",
+                    "example": 80
+                  },
+                  "birthdate": {
+                    "type": "string",
+                    "description": "User's date of birth",
+                    "example": "1985-09-17T15:47:57.302+00:00"
+                  },
+                  "blood": {
+                    "type": "integer",
+                    "description": "User's group of blood",
+                    "example": 2
+                  },
+                  "sex": {
+                    "type": "string",
+                    "description": "User's sex",
+                    "example": "female"
+                  },
+                  "levelActivity": {
+                    "type": "integer",
+                    "description": "User's level of activity",
+                    "example": 3
+                  },
+                  "dailySportTime": {
+                    "type": "number",
+                    "description": "Individual daily activity rate in minutes",
+                    "example": 110
+                  },
+                  "bmr": {
+                    "type": "number",
+                    "description": "Individual daily calorie intake",
+                    "example": 2250
+                  },
+                  "defaultParams": {
+                    "type": "boolean",
+                    "description": "Whether to use default body parameter values instead of user-entered ones",
+                    "example": false
+                  }
+                }
+              }
+            }
+          },
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "qWbgfR7j4D"
+          }
+        },
+        "example": {
+          "user": {
+            "email": "user@mail.com",
+            "password": "qwerty123",
+            "name": "Olivia Lewis",
+            "avatarURL": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e",
+            "bodyParams": {
+              "height": 175,
+              "currentWeight": 86,
+              "desiredWeight": 80,
+              "birthdate": "1985-09-17T15:47:57.302+00:00",
+              "blood": 2,
+              "sex": "female",
+              "levelActivity": 3,
+              "dailySportTime": 110,
+              "bmr": 2250,
+              "defaultParams": false
+            }
+          },
+          "token": "qWbgfR7j4D"
+        }
+      },
+      "LogoutResponse": {
+        "type": "string",
+        "example": "No Content"
+      },
+      "PatchCurrentUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Olivia Lewis"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "bodyParams": {
+            "type": "object",
+            "description": "User's body params",
+            "properties": {
+              "height": {
+                "type": "number",
+                "description": "User's height",
+                "example": 175
+              },
+              "currentWeight": {
+                "type": "number",
+                "description": "User's current weight",
+                "example": 86
+              },
+              "desiredWeight": {
+                "type": "number",
+                "description": "User's desired weight",
+                "example": 80
+              },
+              "birthdate": {
+                "type": "string",
+                "description": "User's date of birth",
+                "example": "1985-09-17T15:47:57.302+00:00"
+              },
+              "blood": {
+                "type": "integer",
+                "description": "User's group of blood",
+                "example": 2
+              },
+              "sex": {
+                "type": "string",
+                "description": "User's sex",
+                "example": "female"
+              },
+              "levelActivity": {
+                "type": "integer",
+                "description": "User's level of activity",
+                "example": 3
+              },
+              "dailySportTime": {
+                "type": "number",
+                "description": "Individual daily activity rate in minutes",
+                "example": 110
+              },
+              "bmr": {
+                "type": "number",
+                "description": "Individual daily calorie intake",
+                "example": 2250
+              },
+              "defaultParams": {
+                "type": "boolean",
+                "description": "Whether to use default body parameter values instead of user-entered ones",
+                "example": false
+              }
+            }
+          }
+        }
+      },
+      "PatchCurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Olivia Lewis"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's avatar URL",
+                "example": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e"
+              },
+              "bodyParams": {
+                "type": "object",
+                "description": "User's body params",
+                "properties": {
+                  "height": {
+                    "type": "number",
+                    "description": "User's height",
+                    "example": 175
+                  },
+                  "currentWeight": {
+                    "type": "number",
+                    "description": "User's current weight",
+                    "example": 86
+                  },
+                  "desiredWeight": {
+                    "type": "number",
+                    "description": "User's desired weight",
+                    "example": 80
+                  },
+                  "birthdate": {
+                    "type": "string",
+                    "description": "User's date of birth",
+                    "example": "1985-09-17T15:47:57.302+00:00"
+                  },
+                  "blood": {
+                    "type": "integer",
+                    "description": "User's group of blood",
+                    "example": 2
+                  },
+                  "sex": {
+                    "type": "string",
+                    "description": "User's sex",
+                    "example": "female"
+                  },
+                  "levelActivity": {
+                    "type": "integer",
+                    "description": "User's level of activity",
+                    "example": 3
+                  },
+                  "dailySportTime": {
+                    "type": "number",
+                    "description": "Individual daily activity rate in minutes",
+                    "example": 110
+                  },
+                  "bmr": {
+                    "type": "number",
+                    "description": "Individual daily calorie intake",
+                    "example": 2250
+                  },
+                  "defaultParams": {
+                    "type": "boolean",
+                    "description": "Whether to use default body parameter values instead of user-entered ones",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "user": {
+            "email": "user@mail.com",
+            "password": "qwerty123",
+            "name": "Olivia Lewis",
+            "avatarURL": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e",
+            "bodyParams": {
+              "height": 175,
+              "currentWeight": 86,
+              "desiredWeight": 80,
+              "birthdate": "1985-09-17T15:47:57.302+00:00",
+              "blood": 2,
+              "sex": "female",
+              "levelActivity": 3,
+              "dailySportTime": 110,
+              "bmr": 2250,
+              "defaultParams": false
+            }
+          }
+        }
+      },
+      "ImageFileRequest": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "description": "User's avatar file",
+            "format": "binary"
+          }
+        }
+      },
+      "PatchAvatarResponse": {
+        "type": "object",
+        "properties": {
+          "avatarURL": {
+            "type": "string",
+            "description": "New avatar URL",
+            "example": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e"
+          }
+        },
+        "example": {
+          "avatarURL": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e"
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -110,28 +110,45 @@ userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
-  email: Joi.string()
-    .pattern(new RegExp(validEmail))
-    .required()
-    .message('Please enter your email like sample example@domain.com'),
-  password: Joi.string()
-    .pattern(new RegExp(validPassword))
-    .required()
-    .message('Password must contain 6 letters and 1 number'),
+  email: Joi.string().pattern(new RegExp(validEmail)).required(),
+  // .message('Please enter your email like sample example@domain.com'),
+  password: Joi.string().pattern(new RegExp(validPassword)).required(),
+  // .message('Password must contain 6 letters and 1 number'),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string()
-    .pattern(new RegExp(validEmail))
-    .required()
-    .message('Please enter your email like sample example@domain.com'),
-  password: Joi.string()
-    .pattern(new RegExp(validPassword))
-    .required()
-    .message('Password must contain 6 letters and 1 number'),
+  email: Joi.string().pattern(new RegExp(validEmail)).required(),
+  // .message('Please enter your email like sample example@domain.com'),
+  password: Joi.string().pattern(new RegExp(validPassword)).required(),
+  // .message('Password must contain 6 letters and 1 number'),
 });
 
-const schemas = { registerSchema, loginSchema };
+const updateUserSchema = Joi.object({
+  name: Joi.string().min(2).max(50).message('Min 2 and max 50 chars'),
+  email: Joi.string().forbidden(),
+  avatarURL: Joi.string(),
+
+  bodyParams: Joi.object({
+    height: Joi.number().min(150).max(250).integer(),
+    currentWeight: Joi.number().min(35).max(300).integer(),
+    desiredWeight: Joi.number().min(35).max(300).integer(),
+
+    birthdate: Joi.date()
+      .min(new Date().getFullYear() - 18, 'now')
+      .iso()
+      .raw(),
+    // .message('Error age'),
+
+    blood: Joi.number().valid(1, 2, 3, 4),
+    sex: Joi.string().valid('male', 'female'),
+    levelActivity: Joi.number().valid(1, 2, 3, 4, 5),
+    dailySportTime: Joi.number().forbidden(),
+    bmr: Joi.number().forbidden(),
+    defaultParams: Joi.boolean().forbidden(),
+  }),
+});
+
+const schemas = { registerSchema, loginSchema, updateUserSchema };
 
 const User = model('user', userSchema);
 

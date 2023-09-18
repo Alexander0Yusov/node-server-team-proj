@@ -3,8 +3,83 @@ const Joi = require('joi');
 
 const { handleMongooseError } = require('../helpers');
 
-const validEmail =
-  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const validEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+const validPassword = /^(?=.*[a-zA-Z]{6})(?=.*\d)[a-zA-Z\d]{7}$/;
+
+const bodyParamsSchema = new Schema({
+  _id: false,
+  height: {
+    type: Number,
+    min: 150,
+    max: 250,
+    default: 150,
+    required: true,
+  },
+  currentWeight: {
+    type: Number,
+    min: 35,
+    max: 300,
+    default: 35,
+    required: true,
+  },
+  desiredWeight: {
+    type: Number,
+    min: 35,
+    max: 300,
+    default: 35,
+    required: true,
+  },
+  birthdate: {
+    type: Date,
+    validate: {
+      validator: function (value) {
+        const currentDate = new Date();
+        currentDate.setFullYear(currentDate.getFullYear() - 18);
+        return value <= currentDate;
+      },
+      message: 'The date must be 18 years or earlier than the current date',
+    },
+    default: () => {
+      let currentDate = new Date();
+      return currentDate.setFullYear(currentDate.getFullYear() - 18);
+    },
+    required: true,
+  },
+  blood: {
+    type: Number,
+    enum: [1, 2, 3, 4],
+    default: 1,
+    required: true,
+  },
+  sex: {
+    type: String,
+    enum: ['male', 'female'],
+    default: 'male',
+    required: true,
+  },
+  levelActivity: {
+    type: Number,
+    enum: [1, 2, 3, 4, 5],
+    default: 1,
+    required: true,
+  },
+  dailySportTime: {
+    type: Number,
+    default: 110,
+    required: true,
+    immutable: true,
+  },
+  bmr: {
+    type: Number,
+    default: 2280,
+    required: true,
+  },
+  defaultParams: {
+    type: Boolean,
+    default: true,
+    required: true,
+  },
+});
 
 const userSchema = new Schema(
   {
@@ -23,6 +98,9 @@ const userSchema = new Schema(
     },
     token: String,
     avatarURL: String,
+    bodyParams: {
+      type: bodyParamsSchema,
+    },
   },
 
   { versionKey: false, timestamps: true }
@@ -31,20 +109,46 @@ const userSchema = new Schema(
 userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
-  password: Joi.string().min(2).max(15).required(),
-  name: Joi.string().min(2).max(15).required(),
-  email: Joi.string()
-    .pattern(new RegExp(validEmail))
-    .required(),
-});
-const loginSchema = Joi.object({
-  password: Joi.string().min(2).max(15).required(),
-  email: Joi.string()
-    .pattern(new RegExp(validEmail))
-    .required(),
+  name: Joi.string().min(2).max(50).required(),
+  email: Joi.string().pattern(new RegExp(validEmail)).required(),
+  // .message('Please enter your email like sample example@domain.com'),
+  password: Joi.string().pattern(new RegExp(validPassword)).required(),
+  // .message('Password must contain 6 letters and 1 number'),
 });
 
-const schemas = { registerSchema, loginSchema };
+const loginSchema = Joi.object({
+  email: Joi.string().pattern(new RegExp(validEmail)).required(),
+  // .message('Please enter your email like sample example@domain.com'),
+  password: Joi.string().pattern(new RegExp(validPassword)).required(),
+  // .message('Password must contain 6 letters and 1 number'),
+});
+
+const updateUserSchema = Joi.object({
+  name: Joi.string().min(2).max(50).message('Min 2 and max 50 chars'),
+  email: Joi.string().forbidden(),
+  avatarURL: Joi.string(),
+
+  bodyParams: Joi.object({
+    height: Joi.number().min(150).max(250).integer(),
+    currentWeight: Joi.number().min(35).max(300).integer(),
+    desiredWeight: Joi.number().min(35).max(300).integer(),
+
+    birthdate: Joi.date()
+      .min(new Date().getFullYear() - 18, 'now')
+      .iso()
+      .raw(),
+    // .message('Error age'),
+
+    blood: Joi.number().valid(1, 2, 3, 4),
+    sex: Joi.string().valid('male', 'female'),
+    levelActivity: Joi.number().valid(1, 2, 3, 4, 5),
+    dailySportTime: Joi.number().forbidden(),
+    bmr: Joi.number().forbidden(),
+    defaultParams: Joi.boolean().forbidden(),
+  }),
+});
+
+const schemas = { registerSchema, loginSchema, updateUserSchema };
 
 const User = model('user', userSchema);
 

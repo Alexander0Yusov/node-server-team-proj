@@ -17,6 +17,12 @@ router.patch(
   ctrl.updateAvatar
 );
 
-router.patch('/current', authenticate, upload.single('avatar'), ctrl.patchUser);
+router.patch(
+  '/current',
+  authenticate,
+  validateBody(schemas.updateUserSchema),
+  upload.single('avatar'),
+  ctrl.patchUser
+);
 
 module.exports = router;

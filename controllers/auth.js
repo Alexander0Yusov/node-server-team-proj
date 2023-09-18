@@ -6,7 +6,12 @@ const bcrypt = require('bcrypt');
 const jimp = require('jimp');
 const cloudinary = require('cloudinary').v2;
 
-const { HttpError, ctrlWrapper } = require('../helpers');
+const {
+  HttpError,
+  ctrlWrapper,
+  calcBmr,
+  isDefaultParams,
+} = require('../helpers');
 const { User } = require('../models/user');
 const { SECRET_KEY, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
 
@@ -32,6 +37,7 @@ const register = async (req, res) => {
     ...req.body,
     avatarURL,
     password: hashPassword,
+    bodyParams: {},
   });
 
   const payload = {
@@ -47,6 +53,7 @@ const register = async (req, res) => {
       name: newUser.name,
       email: newUser.email,
       avatarURL: newUser.avatarURL,
+      bodyParams: newUser.bodyParams,
     },
     token,
   });
@@ -78,6 +85,7 @@ const login = async (req, res) => {
       name: user.name,
       email: user.email,
       avatarURL: user.avatarURL,
+      bodyParams: user.bodyParams,
     },
     token,
   });
@@ -99,9 +107,9 @@ const getCurrent = async (req, res) => {
       name,
       email,
       avatarURL,
-      token,
       bodyParams,
     },
+    token,
   });
 };
 
@@ -136,15 +144,15 @@ const updateAvatar = async (req, res) => {
 };
 
 const patchUser = async (req, res) => {
-  const { _id, bodyParams: _bodyParams } = req.user;
+  const { _id, bodyParams: prevBodyParams } = req.user;
 
-  const { name, email, bodyParams } = req.body;
+  const { name, email, bodyParams: incomingBodyParams } = req.body;
 
-  if ((name || email || bodyParams || req.file) === undefined) {
+  if ((name || email || incomingBodyParams || req.file) === undefined) {
     throw HttpError(400, 'missing fields');
   }
 
-  let updateObj = null;
+  let userData = null;
 
   if (req.file) {
     const { path: tempUpload, originalname } = req.file;
@@ -166,20 +174,45 @@ const patchUser = async (req, res) => {
     const result = await cloudinary.uploader.upload(resultUpload, options);
     fs.unlink(resultUpload);
     const avatarURL = result.secure_url;
-    updateObj = { avatarURL };
+    userData = { avatarURL };
   }
 
   if (req.body) {
-    updateObj = { ...updateObj, ...req.body };
+    userData = { ...userData, ...req.body };
   }
 
-  if (bodyParams) {
-    updateObj.bodyParams = { ..._bodyParams, ...bodyParams };
+  if (incomingBodyParams) {
+    const parsedIncomingBodyParams = JSON.parse(incomingBodyParams);
+    const parsedPrevBodyParams = JSON.parse(JSON.stringify(prevBodyParams));
+
+    const updatedBodyParams = {
+      ...parsedPrevBodyParams,
+      ...parsedIncomingBodyParams,
+      bmr: calcBmr({ ...parsedPrevBodyParams, ...parsedIncomingBodyParams }),
+      defaultParams: false,
+    };
+
+    if (isDefaultParams(updatedBodyParams)) {
+      updatedBodyParams.defaultParams = true;
+    }
+
+    userData.bodyParams = updatedBodyParams;
   }
 
-  await User.findByIdAndUpdate(_id, { ...updateObj });
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { ...userData },
+    { new: true }
+  );
 
-  res.json({ ...updateObj });
+  res.json({
+    user: {
+      name: updatedUser.name,
+      email: updatedUser.email,
+      avatarURL: updatedUser.avatarURL,
+      bodyParams: updatedUser.bodyParams,
+    },
+  });
 };
 
 module.exports = {

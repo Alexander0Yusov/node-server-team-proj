@@ -1,5 +1,5 @@
 {
-  "openapi": "5.0.0",
+  "openapi": "3.0.1",
   "info": {
     "version": "0.1",
     "title": "Power Pulse API docs",

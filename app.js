@@ -4,8 +4,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 // const server = require('http').Server(app);
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerDocument = require('./swagger.json');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const authRouter = require('./routes/api/auth');
 const messageRouter = require('./routes/api/message');
 
@@ -23,7 +23,7 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/users', authRouter);
 app.use('/api/messages', messageRouter);
 

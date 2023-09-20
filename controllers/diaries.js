@@ -1,6 +1,5 @@
 const { HttpError, ctrlWrapper } = require('../helpers');
 const { EatenProduct } = require('../models/eatenProduct');
-const mongoose = require('mongoose');
 
 const getDiaries = async (req, res) => {
   const { _id: owner } = req.user;
@@ -36,12 +35,8 @@ const getDiaries = async (req, res) => {
     },
   ]);
 
-  const collection = mongoose.connection.collection('products'); // Замените на имя вашей коллекции
-  const uniqueTitles = await collection.distinct('title');
-
   res.status(200).json({
     meal,
-    uniqueTitles,
     workout: [],
   });
 };

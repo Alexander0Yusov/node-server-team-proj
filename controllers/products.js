@@ -9,9 +9,7 @@ const getCategories = async (req, res) => {
     throw HttpError(404, 'Not found');
   }
 
-  res.status(200).json({
-    categories,
-  });
+  res.status(200).json({ categories });
 };
 
 const getProducts = async (req, res) => {

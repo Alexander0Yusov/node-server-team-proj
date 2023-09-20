@@ -15,31 +15,42 @@ const getCategories = async (req, res) => {
 };
 
 const getProducts = async (req, res) => {
-  const { bodyParams } = req.user;
-  const { page = 1, limit = 20, category, title, recommended } = req.query;
+  const {
+    bodyParams: { blood },
+  } = req.user;
+  const { page = 1, limit = 10, category, title, recommended } = req.query;
   const skip = (page - 1) * limit;
 
-  const filter = { category, title };
+  const filter = [];
 
-  if (favorite) {
-    filter.favorite = favorite;
+  if (category) {
+    filter.push({ category });
+  }
+  if (title) {
+    filter.push({ title: { $regex: String(title), $options: 'i' } });
+  }
+  if (recommended === 'false') {
+    filter.push({ [`groupBloodNotAllowed.${blood}`]: false });
+  }
+  if (recommended === 'true') {
+    filter.push({ [`groupBloodNotAllowed.${blood}`]: true });
   }
 
-  const result = await Contact.find(filter, '-__v', {
-    skip,
-    limit,
-  }).populate('owner', 'email subscription');
-  res.json(result);
+  const Products = mongoose.connection.collection('products');
 
-  if (!categories.length) {
-    throw HttpError(404, 'Not found');
-  }
+  const products = await Products.find({
+    $and: filter,
+  })
+    .skip(skip)
+    .limit(limit)
+    .toArray();
 
   res.status(200).json({
-    categories,
+    products,
   });
 };
 
 module.exports = {
-  getDiaries: ctrlWrapper(getCategories),
+  getCategories: ctrlWrapper(getCategories),
+  getProducts: ctrlWrapper(getProducts),
 };

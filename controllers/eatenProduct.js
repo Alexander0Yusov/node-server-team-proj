@@ -7,13 +7,17 @@ const postEatenProduct = async (req, res) => {
 
   const [yyyymmdd, _] = date.split('T');
 
-  const newEatenProduct = await EatenProduct.create({
+  const result = await EatenProduct.create({
     ...req.body,
     date: yyyymmdd,
     owner,
   });
 
-  res.status(201).json(newEatenProduct);
+  res.status(201).json({
+    id: result._id,
+    productId: result.productId,
+    weight: result.weight,
+  });
 };
 
 const deleteEatenProductById = async (req, res) => {
@@ -27,7 +31,12 @@ const deleteEatenProductById = async (req, res) => {
   if (!result) {
     throw HttpError(404, 'Not found');
   }
-  res.json(result);
+
+  res.json({
+    id: result._id,
+    productId: result.productId,
+    weight: result.weight,
+  });
 };
 
 module.exports = {

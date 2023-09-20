@@ -38,13 +38,13 @@ const getProducts = async (req, res) => {
   let result;
 
   if (filter.length === 0) {
-    result = await Products.find({}).skip(skip).limit(limit).toArray();
+    result = await Products.find({}).skip(skip).limit(Number(limit)).toArray();
   } else {
     result = await Products.find({
       $and: filter,
     })
       .skip(skip)
-      .limit(limit)
+      .limit(Number(limit))
       .toArray();
   }
 

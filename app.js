@@ -8,6 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const authRouter = require('./routes/api/auth');
 const messageRouter = require('./routes/api/message');
+const doneExercisesRouter = require('./routes/api/doneExercises');
 
 // const { addUser, findUser, getRoomsUsers, removeUser } = require('./users');
 
@@ -26,6 +27,7 @@ app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/users', authRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/doneExercises', doneExercisesRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

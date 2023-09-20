@@ -7,6 +7,8 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const authRouter = require('./routes/api/auth');
+const eatenProductRouter = require('./routes/api/eatenProduct');
+const diariesRouter = require('./routes/api/diaries');
 const messageRouter = require('./routes/api/message');
 
 // const { addUser, findUser, getRoomsUsers, removeUser } = require('./users');
@@ -25,6 +27,9 @@ app.use(cors());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/users', authRouter);
+app.use('/api/eaten-products', eatenProductRouter);
+app.use('/api/diaries', diariesRouter);
+
 app.use('/api/messages', messageRouter);
 
 app.use((req, res) => {

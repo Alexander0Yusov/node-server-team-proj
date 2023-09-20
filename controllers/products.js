@@ -35,16 +35,21 @@ const getProducts = async (req, res) => {
   }
 
   const Products = mongoose.connection.collection('products');
+  let result;
 
-  const products = await Products.find({
-    $and: filter,
-  })
-    .skip(skip)
-    .limit(limit)
-    .toArray();
+  if (filter.length === 0) {
+    result = await Products.find({}).skip(skip).limit(limit).toArray();
+  } else {
+    result = await Products.find({
+      $and: filter,
+    })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+  }
 
   res.status(200).json({
-    products,
+    result,
   });
 };
 

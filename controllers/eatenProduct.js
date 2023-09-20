@@ -9,8 +9,6 @@ const postEatenProduct = async (req, res) => {
 
   const newEatenProduct = await EatenProduct.create({
     ...req.body,
-    date: yyyymmdd,
-    owner,
   });
 
   res.status(201).json(newEatenProduct);
@@ -27,6 +25,8 @@ const deleteEatenProductById = async (req, res) => {
   if (!result) {
     throw HttpError(404, 'Not found');
   }
+  delete result.owner;
+  delete result.date;
   res.json(result);
 };
 

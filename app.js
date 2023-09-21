@@ -7,7 +7,7 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const authRouter = require('./routes/api/auth');
-const eatenProductRouter = require('./routes/api/eatenProduct');
+const eatenProductRouter = require('./routes/api/eatenProducts');
 const diariesRouter = require('./routes/api/diaries');
 const productsRouter = require('./routes/api/products');
 

@@ -36,25 +36,25 @@ const getDiaries = async (req, res) => {
     },
   ]);
 
-  const workout = await EatenProduct.aggregate([
+  const workout = await DoneExercise.aggregate([
     {
       $match: filter,
     },
     {
       $lookup: {
-        from: 'products',
-        localField: 'productId',
+        from: 'exercises',
+        localField: 'exerciseId',
         foreignField: '_id',
-        as: 'product',
+        as: 'exercise',
       },
     },
     {
-      $unwind: '$product',
+      $unwind: '$exercise',
     },
     {
       $project: {
-        product: 1,
-        weight: 1,
+        exercise: 1,
+        duration: 1,
       },
     },
   ]);

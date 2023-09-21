@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs/promises');
-const gravatar = require('gravatar');
+// const gravatarUrl = require('gravatar-url');
+// import gravatarUrl from 'gravatar-url';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const jimp = require('jimp');
@@ -31,11 +32,12 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
+  // const avatarURL = gravatar.url(String(email));
+  // const avatarURL = gravatarUrl(String(email), { size: 400 });
 
   const newUser = await User.create({
     ...req.body,
-    avatarURL,
+    avatarURL: '',
     password: hashPassword,
     bodyParams: {},
   });

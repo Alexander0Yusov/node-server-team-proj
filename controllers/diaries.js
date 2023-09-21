@@ -13,7 +13,7 @@ const getDiaries = async (req, res) => {
     owner,
   };
 
-  const meal = await EatenProduct.aggregate([
+  const mealPromise = EatenProduct.aggregate([
     {
       $match: filter,
     },
@@ -36,7 +36,7 @@ const getDiaries = async (req, res) => {
     },
   ]);
 
-  const workout = await DoneExercise.aggregate([
+  const workoutPromise = DoneExercise.aggregate([
     {
       $match: filter,
     },
@@ -58,6 +58,8 @@ const getDiaries = async (req, res) => {
       },
     },
   ]);
+
+  const [meal, workout] = await Promise.all([mealPromise, workoutPromise]);
 
   res.status(200).json({
     meal,

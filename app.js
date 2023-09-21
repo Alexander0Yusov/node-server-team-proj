@@ -31,11 +31,11 @@ app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/users', authRouter);
 app.use('/api/eaten-products', eatenProductRouter);
+app.use('/api/done-exercises', doneExercisesRouter);
 app.use('/api/diaries', diariesRouter);
 app.use('/api/products', productsRouter);
 
 app.use('/api/messages', messageRouter);
-app.use('/api/doneExercises', doneExercisesRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

@@ -1,4 +1,4 @@
-const { HttpError } = require('./../helpers');
+const { HttpError } = require('../helpers');
 
 const isValidDate = (req, res, next) => {
   const { dateIso } = req.params;

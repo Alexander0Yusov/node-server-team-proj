@@ -8,18 +8,10 @@ const { schemas } = require('../../models/doneExercises');
 router.post(
   '/',
   authenticate,
-  validateBody(schemas.addDoneExerciseSchema),
-  ctrl.addDoneExercise
+  validateBody(schemas.postDoneExerciseSchema),
+  ctrl.postDoneExercise
 );
 
-router.patch(
-  '/:id',
-  authenticate,
-  isValidId,
-  validateBody(schemas.updateDoneExerciseSchema),
-  ctrl.updateDoneExercise
-);
-
-router.delete('/:id', authenticate, isValidId, ctrl.removeDoneExercise);
+router.delete('/:id', authenticate, isValidId, ctrl.deleteDoneExercise);
 
 module.exports = router;

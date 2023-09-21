@@ -5,24 +5,26 @@ const { handleMongooseError } = require('../helpers');
 const doneExerciseSchema = new Schema(
   {
     exerciseId: {
-      type: String,
-      required: [true, 'Missing exercise'],
+      type: Schema.Types.ObjectId,
+      ref: 'exercise',
+      required: [true, 'Set exercise id'],
     },
     date: {
       type: String,
-      required: [true, 'Missing date'],
+      required: [true, 'Set date'],
     },
-    time: {
+    duration: {
       type: Number,
-      required: [true, 'Missing duration of the done exercise'],
+      required: [true, 'Set exercise duration'],
     },
-    calories: {
-      type: Number,
-      required: [true, 'Missing number of burned calories'],
-    },
-    user: {
+    // calories: {
+    //   type: Number,
+    //   required: [true, 'Missing number of burned calories'],
+    // },
+    owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
+      required: true,
     },
   },
   { versionKey: false, timestamps: false }
@@ -30,31 +32,23 @@ const doneExerciseSchema = new Schema(
 
 doneExerciseSchema.post('save', handleMongooseError);
 
-const addDoneExerciseSchema = Joi.object({
+const postDoneExerciseSchema = Joi.object({
   exerciseId: Joi.string().required().messages({
     'any.required': 'Missing required exerciseId',
   }),
   date: Joi.string().required().messages({
     'any.required': 'Missing required date',
   }),
-  time: Joi.number().min(1).required().messages({
+  duration: Joi.number().min(1).required().messages({
     'any.required': 'Missing required duration of the done exercise',
   }),
-  calories: Joi.number().min(1).required().messages({
-    'any.required': 'Missing required number of burned calories',
-  }),
-});
-
-const updateDoneExerciseSchema = Joi.object({
-  exerciseId: Joi.string(),
-  date: Joi.string(),
-  time: Joi.number().min(1),
-  calories: Joi.number().min(1),
+  // calories: Joi.number().min(1).required().messages({
+  //   'any.required': 'Missing required number of burned calories',
+  // }),
 });
 
 const schemas = {
-  addDoneExerciseSchema,
-  updateDoneExerciseSchema,
+  postDoneExerciseSchema,
 };
 
 const DoneExercise = model('doneExercise', doneExerciseSchema);

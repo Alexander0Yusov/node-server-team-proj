@@ -12,6 +12,7 @@ const diariesRouter = require('./routes/api/diaries');
 const productsRouter = require('./routes/api/products');
 
 const messageRouter = require('./routes/api/message');
+const doneExercisesRouter = require('./routes/api/doneExercises');
 
 // const { addUser, findUser, getRoomsUsers, removeUser } = require('./users');
 
@@ -34,6 +35,7 @@ app.use('/api/diaries', diariesRouter);
 app.use('/api/products', productsRouter);
 
 app.use('/api/messages', messageRouter);
+app.use('/api/doneExercises', doneExercisesRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

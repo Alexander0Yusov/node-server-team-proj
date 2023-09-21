@@ -1,5 +1,6 @@
 const { HttpError, ctrlWrapper } = require('../helpers');
 const { EatenProduct } = require('../models/eatenProduct');
+const { DoneExercise } = require('../models/doneExercise');
 
 const getDiaries = async (req, res) => {
   const { _id: owner } = req.user;
@@ -35,9 +36,32 @@ const getDiaries = async (req, res) => {
     },
   ]);
 
+  const workout = await EatenProduct.aggregate([
+    {
+      $match: filter,
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'productId',
+        foreignField: '_id',
+        as: 'product',
+      },
+    },
+    {
+      $unwind: '$product',
+    },
+    {
+      $project: {
+        product: 1,
+        weight: 1,
+      },
+    },
+  ]);
+
   res.status(200).json({
     meal,
-    workout: [],
+    workout,
   });
 };
 

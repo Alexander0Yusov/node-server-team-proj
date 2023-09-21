@@ -1,4 +1,4 @@
-const { DoneExercise } = require('../models/doneExercises');
+const { DoneExercise } = require('../models/doneExercise');
 const { HttpError, ctrlWrapper } = require('../helpers');
 
 const deleteDoneExercise = async (req, res) => {

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ctrl = require('../../controllers/doneExercises');
 const { validateBody, isValidId, authenticate } = require('../../middelwares');
-const { schemas } = require('../../models/doneExercises');
+const { schemas } = require('../../models/doneExercise');
 
 router.post(
   '/',

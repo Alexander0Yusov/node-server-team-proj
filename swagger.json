@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "0.1",
+    "version": "0.2",
     "title": "Power Pulse API docs",
     "description": "API documentation for project Power Pulse"
   },
@@ -21,6 +21,26 @@
     {
       "name": "User",
       "description": "User endpoints"
+    },
+    {
+      "name": "Eaten products",
+      "description": "Products the user ate"
+    },
+    {
+      "name": "Done exercises",
+      "description": "Exercises performed by the user"
+    },
+    {
+      "name": "Diaries",
+      "description": "User diary"
+    },
+    {
+      "name": "Products",
+      "description": "Info about products"
+    },
+    {
+      "name": "Exercises",
+      "description": "Info about exercises"
     }
   ],
 
@@ -53,12 +73,10 @@
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
+            "description": "Bad request (invalid request body)"
           },
           "409": {
-            "description": "Email is already in use",
-            "content": {}
+            "description": "Email is already in use"
           }
         }
       }
@@ -91,12 +109,10 @@
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
+            "description": "Bad request (invalid request body)"
           },
           "401": {
-            "description": "Email or password invalid",
-            "content": {}
+            "description": "Email or password invalid"
           }
         }
       }
@@ -119,8 +135,7 @@
             }
           },
           "401": {
-            "description": "Not authorized",
-            "content": {}
+            "description": "Not authorized"
           }
         }
       }
@@ -143,8 +158,7 @@
             }
           },
           "401": {
-            "description": "Not authorized",
-            "content": {}
+            "description": "Not authorized"
           }
         }
       },
@@ -181,17 +195,271 @@
             }
           },
           "400": {
-            "description": "missing fields",
-            "content": {}
+            "description": "Missing fields"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {}
+            "description": "Not authorized"
           }
         }
       }
+    },
+
+    "/api/eaten-products": {
+      "post": {
+        "tags": ["Eaten products"],
+        "summary": "Addition of eaten product",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Object of eaten product",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEatenProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EatenProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields"
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Eaten products"],
+        "summary": "Deletion of eaten product",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EatenProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The passed id is not valid"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Eaten product not found"
+          }
+        }
+      }
+    },
+    "/api/done-exercises": {
+      "post": {
+        "tags": ["Done exercises"],
+        "summary": "Addition of done exercise",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Object of done exercise",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDoneExerciseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoneExerciseResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields"
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Done exercises"],
+        "summary": "Deletion of done exercise",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoneExerciseResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The passed id is not valid"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Done exercise not found"
+          }
+        }
+      }
+    },
+    "/api/diaries": {
+      "get": {
+        "tags": ["Diaries"],
+        "summary": "User diary",
+        "parameters": [
+          {
+            "name": "dateIso",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Diary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The passed id is not valid"
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Info about products",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The passed id is not valid"
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/api/products/categories": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Info about product categories",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductCategories"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The passed id is not valid"
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+
+    "api/exercises": {
+      "get": {
+        "tags": ["Exercises"]
+      }
+    },
+    "api/bodyParts": {
+      "get": {
+        "tags": ["Exercises"]
+      }
+    },
+    "api/muscules": {
+      "get": {
+        "tags": ["Exercises"]
+      }
+    },
+    "api/equipments": {
+      "get": {
+        "tags": ["Exercises"]
+      }
     }
   },
+
   "components": {
     "schemas": {
       "RegistrationRequest": {
@@ -335,7 +603,6 @@
               },
               "bodyParams": {
                 "type": "object",
-                "description": "User's body params",
                 "properties": {
                   "height": {
                     "type": "number",
@@ -421,7 +688,6 @@
               },
               "bodyParams": {
                 "type": "object",
-                "description": "User's body params",
                 "properties": {
                   "height": {
                     "type": "number",
@@ -482,6 +748,368 @@
       "LogoutResponse": {
         "type": "string",
         "example": "No Content"
+      },
+
+      "AddEatenProductRequest": {
+        "type": "object",
+        "required": ["productId", "weight", "date"],
+        "properties": {
+          "productId": {
+            "type": "string",
+            "description": "Id of eaten product",
+            "example": "5d51694902b2373622ff5773"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Weight of eaten product",
+            "example": 300
+          },
+          "date": {
+            "type": "string",
+            "description": "Date when the product was eaten",
+            "example": "2023-09-19T11:43:11.790+00:00"
+          }
+        }
+      },
+      "EatenProductResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of info about eaten product",
+            "example": "12345678qwerty"
+          },
+          "productId": {
+            "type": "string",
+            "description": "Id of eaten product",
+            "example": "5d51694902b2373622ff5773"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Weight of eaten product",
+            "example": 300
+          }
+        }
+      },
+      "AddDoneExerciseRequest": {
+        "type": "object",
+        "required": ["exerciseId", "duration", "date"],
+        "properties": {
+          "exerciseId": {
+            "type": "string",
+            "description": "Id of done exercise",
+            "example": "6503194aa1c682f0d6a5ce3b"
+          },
+          "duration": {
+            "type": "number",
+            "description": "Duration of done exercise",
+            "example": 30
+          },
+          "date": {
+            "type": "string",
+            "description": "Date when the exercise was completed",
+            "example": "2023-09-19T11:43:11.790+00:00"
+          }
+        }
+      },
+      "DoneExerciseResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of info about done exercise",
+            "example": "12345678qwerty"
+          },
+          "exerciseId": {
+            "type": "string",
+            "description": "Id of done exercise",
+            "example": "6503194aa1c682f0d6a5ce3b"
+          },
+          "duration": {
+            "type": "number",
+            "description": "Duration of done exercise",
+            "example": 300
+          }
+        }
+      },
+      "Diary": {
+        "type": "object",
+        "properties": {
+          "meal": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Id of info about eaten product",
+                  "example": "12345678qwerty"
+                },
+                "weight": {
+                  "type": "number",
+                  "description": "Weight of eaten product",
+                  "example": 150
+                },
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Id of product",
+                      "example": "5d51694902b2373622ff5773"
+                    },
+                    "weight": {
+                      "type": "number",
+                      "description": "Weight of product",
+                      "example": 100
+                    },
+                    "calories": {
+                      "type": "number",
+                      "description": "Calories contained in this weight of product",
+                      "example": 340
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Category of product",
+                      "example": "dairy"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Title of product",
+                      "example": "Danbo cheese"
+                    },
+                    "groupBloodNotAllowed": {
+                      "type": "object",
+                      "properties": {
+                        "1": {
+                          "type": "boolean",
+                          "description": "Is this product not recommended for blood group 1 ?",
+                          "example": true
+                        },
+                        "2": {
+                          "type": "boolean",
+                          "description": "Is this product not recommended for blood group 2 ?",
+                          "example": true
+                        },
+                        "3": {
+                          "type": "boolean",
+                          "description": "Is this product not recommended for blood group 3 ?",
+                          "example": false
+                        },
+                        "4": {
+                          "type": "boolean",
+                          "description": "Is this product not recommended for blood group 4 ?",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "workout": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Id of info about done exercise",
+                  "example": "123456789qwerty"
+                },
+                "duration": {
+                  "type": "number",
+                  "description": "Duration of done exercise",
+                  "example": 15
+                },
+                "exercise": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Id of exercise",
+                      "example": "6503194aa1c682f0d6a5ce3b"
+                    },
+                    "bodyPart": {
+                      "type": "number",
+                      "description": "Part of body",
+                      "example": "waist"
+                    },
+                    "equipment": {
+                      "type": "number",
+                      "description": "Equipment",
+                      "example": "body weight"
+                    },
+                    "gifUrl": {
+                      "type": "string",
+                      "description": "How to do execise",
+                      "example": "https://res.cloudinary.com/ditdqzoio/image/upload/v1687127066/exercises/0001.gif"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of exercise",
+                      "example": "3/4 sit-up"
+                    },
+                    "target": {
+                      "type": "string",
+                      "description": "Target",
+                      "example": "abs"
+                    },
+                    "burnedCalories": {
+                      "type": "number",
+                      "description": "Calories burned during this exercise time",
+                      "example": 220
+                    },
+                    "time": {
+                      "type": "number",
+                      "description": "Time of completing the exercise",
+                      "example": 3
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "meal": [
+            {
+              "_id": "12345678qwerty",
+              "weight": 200,
+              "product": {
+                "_id": "5d51694902b2373622ff5773",
+                "weight": 100,
+                "calories": 340,
+                "category": "dairy",
+                "title": "Danbo cheese",
+                "groupBloodNotAllowed": {
+                  "1": true,
+                  "2": true,
+                  "3": false,
+                  "4": false
+                }
+              }
+            }
+          ],
+          "workout": [
+            {
+              "_id": "123456789qwerty",
+              "duration": 14,
+              "exercise": {
+                "_id": "6503194aa1c682f0d6a5ce3b",
+                "bodyPart": "waist",
+                "equipment": "body weight",
+                "gifUrl": "https://res.cloudinary.com/ditdqzoio/image/upload/v1687127066/exercises/0001.gif",
+                "name": "3/4 sit-up",
+                "target": "abs",
+                "burnedCalories": 220,
+                "time": 3
+              }
+            }
+          ]
+        }
+      },
+      "Products": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Id of product",
+              "example": "5d51694902b2373622ff5773"
+            },
+            "weight": {
+              "type": "number",
+              "description": "Weight of product",
+              "example": 100
+            },
+            "calories": {
+              "type": "number",
+              "description": "Calories contained in this weight of product",
+              "example": 340
+            },
+            "category": {
+              "type": "string",
+              "description": "Category of product",
+              "example": "dairy"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of product",
+              "example": "Danbo cheese"
+            },
+            "groupBloodNotAllowed": {
+              "type": "object",
+              "properties": {
+                "1": {
+                  "type": "boolean",
+                  "description": "Is this product not recommended for blood group 1 ?",
+                  "example": true
+                },
+                "2": {
+                  "type": "boolean",
+                  "description": "Is this product not recommended for blood group 2 ?",
+                  "example": true
+                },
+                "3": {
+                  "type": "boolean",
+                  "description": "Is this product not recommended for blood group 3 ?",
+                  "example": false
+                },
+                "4": {
+                  "type": "boolean",
+                  "description": "Is this product not recommended for blood group 4 ?",
+                  "example": false
+                }
+              }
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "5d51694902b2373622ff5773",
+            "weight": 100,
+            "calories": 340,
+            "category": "dairy",
+            "title": "Danbo cheese",
+            "groupBloodNotAllowed": {
+              "1": true,
+              "2": true,
+              "3": false,
+              "4": false
+            }
+          },
+          {
+            "_id": "5d51694902b2373622ff5b7f",
+            "weight": 100,
+            "calories": 112,
+            "category": "fish",
+            "title": "marlin",
+            "groupBloodNotAllowed": {
+              "1": false,
+              "2": false,
+              "3": false,
+              "4": false
+            }
+          }
+        ]
+      },
+      "ProductCategories": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "dried fruits"
+            }
+          }
+        },
+        "example": {
+          "categories": ["alcoholic drinks", "berries", "cereals"]
+        }
       }
     },
     "securitySchemes": {

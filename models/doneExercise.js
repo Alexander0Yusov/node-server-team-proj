@@ -36,7 +36,7 @@ const postDoneExerciseSchema = Joi.object({
   exerciseId: Joi.string().required().messages({
     'any.required': 'Missing required exerciseId',
   }),
-  date: Joi.string().required().messages({
+  date: Joi.date().iso().required().messages({
     'any.required': 'Missing required date',
   }),
   duration: Joi.number().min(1).required().messages({

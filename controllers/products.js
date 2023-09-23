@@ -34,22 +34,35 @@ const getProducts = async (req, res) => {
     filter.push({ [`groupBloodNotAllowed.${blood}`]: true });
   }
 
-  const Products = mongoose.connection.collection('products');
-  let result;
-
-  if (filter.length === 0) {
-    result = await Products.find({}).skip(skip).limit(Number(limit)).toArray();
-  } else {
-    result = await Products.find({
+  let matchObj = {};
+  if (filter.length !== 0) {
+    matchObj = {
       $and: filter,
-    })
-      .skip(skip)
-      .limit(Number(limit))
-      .toArray();
+    };
   }
 
+  const aggregatePipeline = [
+    {
+      $match: matchObj,
+    },
+    {
+      $facet: {
+        data: [{ $skip: skip }, { $limit: Number(limit) }],
+        totalCount: [{ $count: 'total' }],
+      },
+    },
+    {
+      $unwind: '$totalCount',
+    },
+  ];
+  const Products = mongoose.connection.collection('products');
+  const result = await Products.aggregate(aggregatePipeline).toArray();
+  const data = result[0]?.data;
+  const totalCount = result[0]?.totalCount ? result[0]?.totalCount?.total : 0;
+
   res.status(200).json({
-    products: result,
+    totalCount,
+    products: data || [],
   });
 };
 

@@ -69,16 +69,15 @@ const getDiaries = async (req, res) => {
   // const newJson = path.join(__dirname, '../', 'temp', 'newJson.json');
   // const newAr = [];
 
-  // for (let i = 134; i < 200; i++) {
+  // for (let i = 0; i < 100; i++) {
   //   if (
-  // i === 0 ||
-  // i === 1 ||
-  // i === 2 ||
-  // i === 67 ||
-  // i === 68 ||
-  // i === 69 ||
-  // i === 70 ||
-  // i === 79 ||
+  //     i === 79 ||
+  //     i === 194 ||
+  //     i === 195 ||
+  //     i === 196 ||
+  //     i === 681 ||
+  //     i === 920 ||
+  // forget upper
 
   // i === 134 ||
   // i === 135 ||
@@ -89,9 +88,6 @@ const getDiaries = async (req, res) => {
   // i === 140 ||
   // i === 141 ||
   // i === 175 ||
-  // i === 194 ||
-  // i === 195 ||
-  // i === 196 ||
 
   // i === 222 ||
   // i === 223 ||
@@ -109,8 +105,7 @@ const getDiaries = async (req, res) => {
   // i === 396 ||
   // i === 397 ||
   // i === 460 ||
-  // i === 681 ||
-  //   i === 920
+  //   i === 5555
   // ) {
   //
   // console.log('counter ===== ', i);
@@ -132,10 +127,11 @@ const getDiaries = async (req, res) => {
   // };
 
   // newAr.push(tempObj);
-  // console.log('counter = ', i);
+  // console.log('counter FALSE = ', i);
   // continue;
   // }
   // continue;
+  //   await new Promise(r => setTimeout(r, 2000));
 
   //   const newUrl = await relocateImg(exersSorce[i].gifUrl, exersSorce[i].name);
   //   const tempObj = {

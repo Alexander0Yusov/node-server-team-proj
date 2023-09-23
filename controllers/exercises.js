@@ -17,15 +17,29 @@ const getExercises = async (req, res) => {
     filter.target = target;
   }
 
-  const Exercises = mongoose.connection.collection('exercises');
+  const aggregatePipeline = [
+    {
+      $match: filter,
+    },
+    {
+      $facet: {
+        data: [{ $skip: skip }, { $limit: Number(limit) }],
+        totalCount: [{ $count: 'total' }],
+      },
+    },
+    {
+      $unwind: '$totalCount',
+    },
+  ];
 
-  const result = await Exercises.find(filter)
-    .skip(skip)
-    .limit(Number(limit))
-    .toArray();
+  const Exercises = mongoose.connection.collection('exercises');
+  const result = await Exercises.aggregate(aggregatePipeline).toArray();
+  const data = result[0]?.data;
+  const totalCount = result[0]?.totalCount ? result[0]?.totalCount?.total : 0;
 
   res.status(200).json({
-    exercises: result,
+    totalCount,
+    exercises: data || [],
   });
 };
 

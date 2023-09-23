@@ -104,7 +104,7 @@ const userSchema = new Schema(
     },
   },
 
-  { versionKey: false, timestamps: false }
+  { versionKey: false, timestamps: true }
 );
 
 userSchema.post('save', handleMongooseError);

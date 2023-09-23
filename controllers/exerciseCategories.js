@@ -27,20 +27,33 @@ const getExerciseCategories = async (req, res) => {
   }
 
   const findObj = {};
-
   if (filterValue) {
     findObj.filter = filterValue;
   }
-  console.log(findObj);
 
   const Filters = mongoose.connection.collection('filters');
-  const result = await Filters.find(findObj)
-    .skip(skip)
-    .limit(Number(limit))
-    .toArray();
+
+  const aggregatePipeline = [
+    {
+      $match: findObj,
+    },
+    {
+      $facet: {
+        data: [{ $skip: skip }, { $limit: Number(limit) }],
+        totalCount: [{ $count: 'total' }],
+      },
+    },
+    {
+      $unwind: '$totalCount',
+    },
+  ];
+  const result = await Filters.aggregate(aggregatePipeline).toArray();
+  const data = result[0]?.data;
+  const totalCount = result[0]?.totalCount ? result[0]?.totalCount?.total : 0;
 
   res.status(200).json({
-    exerciseCategories: result,
+    totalCount,
+    exerciseCategories: data || [],
   });
 };
 

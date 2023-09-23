@@ -41,7 +41,7 @@ const relocateImg = async (sourseUrl, fileName, fileType = 'gif') => {
       use_filename: true,
     };
 
-    const subfolder = 'gifUrls_100-199';
+    const subfolder = 'gifUrls_0-99';
     if (subfolder) {
       uploadOptions.folder += `/${subfolder}`;
     }

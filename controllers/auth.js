@@ -44,7 +44,7 @@ const register = async (req, res) => {
     id: newUser._id,
   };
   const token = jwt.sign(payload, SECRET_KEY, {
-    expiresIn: '24h',
+    expiresIn: '7d',
   });
   await User.findByIdAndUpdate(newUser._id, { token });
 
@@ -77,7 +77,7 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, {
-    expiresIn: '24h',
+    expiresIn: '7d',
   });
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
@@ -166,6 +166,7 @@ const patchUser = async (req, res) => {
     await image.writeAsync(resultUpload);
 
     const options = {
+      folder: 'fit-proj/avatars',
       use_filename: true,
       unique_filename: false,
       overwrite: true,

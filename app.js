@@ -10,6 +10,8 @@ const authRouter = require('./routes/api/auth');
 const eatenProductRouter = require('./routes/api/eatenProducts');
 const diariesRouter = require('./routes/api/diaries');
 const productsRouter = require('./routes/api/products');
+const exercisesRouter = require('./routes/api/exercises');
+const exerciseCategoriesRouter = require('./routes/api/exerciseCategories');
 
 const messageRouter = require('./routes/api/message');
 const doneExercisesRouter = require('./routes/api/doneExercises');
@@ -34,6 +36,8 @@ app.use('/api/eaten-products', eatenProductRouter);
 app.use('/api/done-exercises', doneExercisesRouter);
 app.use('/api/diaries', diariesRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/exercises', exercisesRouter);
+app.use('/api/exercise-categories', exerciseCategoriesRouter);
 
 app.use('/api/messages', messageRouter);
 

@@ -161,7 +161,7 @@ const patchUser = async (req, res) => {
     const resultUpload = path.join(__dirname, '../', 'temp', filename);
 
     const image = await jimp.read(tempUpload);
-    image.resize(500, jimp.AUTO);
+    image.resize(200, jimp.AUTO);
     fs.unlink(tempUpload);
     await image.writeAsync(resultUpload);
 

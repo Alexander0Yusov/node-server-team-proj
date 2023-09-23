@@ -2,7 +2,8 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 const mongoose = require('mongoose');
 
 const getExerciseCategories = async (req, res) => {
-  const { page = 1, limit = 10, category } = req.query;
+  const { page = 1, limit = 10 } = req.query;
+  const { category } = req.params;
   const skip = (page - 1) * limit;
 
   const filterCategories = ['Body parts', 'Muscles', 'Equipment'];
@@ -10,7 +11,7 @@ const getExerciseCategories = async (req, res) => {
 
   if (category) {
     switch (category) {
-      case 'body parts':
+      case 'bodyparts':
         filterValue = filterCategories[0];
         break;
       case 'muscles':

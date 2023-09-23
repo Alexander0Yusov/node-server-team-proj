@@ -10,6 +10,7 @@ const authRouter = require('./routes/api/auth');
 const eatenProductRouter = require('./routes/api/eatenProduct');
 const diariesRouter = require('./routes/api/diaries');
 const productsRouter = require('./routes/api/products');
+const statisticRouter = require('./routes/api/statistic')
 
 const messageRouter = require('./routes/api/message');
 
@@ -32,8 +33,11 @@ app.use('/api/users', authRouter);
 app.use('/api/eaten-products', eatenProductRouter);
 app.use('/api/diaries', diariesRouter);
 app.use('/api/products', productsRouter);
+app.use('/statistic', statisticRouter);
+
 
 app.use('/api/messages', messageRouter);
+
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

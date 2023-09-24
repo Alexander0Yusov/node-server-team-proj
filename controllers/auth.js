@@ -54,6 +54,7 @@ const register = async (req, res) => {
       email: newUser.email,
       avatarURL: newUser.avatarURL,
       bodyParams: newUser.bodyParams,
+      createdAt: newUser.createdAt,
     },
     token,
   });
@@ -62,7 +63,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email }, '-createdAt -updatedAt');
+  const user = await User.findOne({ email }, '-updatedAt');
   if (!user) {
     throw HttpError(401, 'Email or password invalid');
   }
@@ -86,6 +87,7 @@ const login = async (req, res) => {
       email: user.email,
       avatarURL: user.avatarURL,
       bodyParams: user.bodyParams,
+      createdAt: user.createdAt,
     },
     token,
   });
@@ -100,7 +102,14 @@ const logout = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { name, email, avatarURL, token, bodyParams = null } = req.user;
+  const {
+    name,
+    email,
+    avatarURL,
+    token,
+    createdAt,
+    bodyParams = null,
+  } = req.user;
 
   res.json({
     user: {
@@ -108,6 +117,7 @@ const getCurrent = async (req, res) => {
       email,
       avatarURL,
       bodyParams,
+      createdAt,
     },
     token,
   });

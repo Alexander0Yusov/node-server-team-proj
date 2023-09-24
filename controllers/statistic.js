@@ -21,7 +21,11 @@ const getAllUsers = async (req, res) => {
 
   const allExercisesHours = Math.round(allExercisesTime / 60);
 
-  res.json([allUsers.length, allExercises.length, allExercisesHours]);
+  res.json({
+    totalUsersCount: allUsers.length,
+    totalExercisesCount: allExercises.length,
+    totalExercisesDuration: allExercisesHours,
+  });
 };
 
 module.exports = {

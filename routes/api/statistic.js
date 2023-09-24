@@ -1,9 +1,8 @@
-const express = require('express'); 
-const ctrl = require('../../controllers/statistic'); 
-const { validateBody } = require('../../middelwares');
-const { schemas } = require('../../models/user');
-const router = express.Router(); 
+const express = require('express');
+const ctrl = require('../../controllers/statistic');
+const { authenticate } = require('../../middelwares');
+const router = express.Router();
 
-router.get('/', ctrl.getAllUsers); 
+router.get('/', authenticate, ctrl.getAllUsers);
 
-module.exports = router; 
+module.exports = router;

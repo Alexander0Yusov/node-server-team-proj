@@ -1,7 +1,6 @@
-const { HttpError, ctrlWrapper } = require('../helpers');
+const { ctrlWrapper } = require('../helpers');
 const { EatenProduct } = require('../models/eatenProduct');
 const { DoneExercise } = require('../models/doneExercise');
-// const { createJsonFilters } = require('../helpers/relocateImg');
 
 const getDiaries = async (req, res) => {
   const { _id: owner } = req.user;
@@ -61,8 +60,6 @@ const getDiaries = async (req, res) => {
   ]);
 
   const [meal, workout] = await Promise.all([mealPromise, workoutPromise]);
-
-  // await createJsonFilters();
 
   res.status(200).json({
     meal,

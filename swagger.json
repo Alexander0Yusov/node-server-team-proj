@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "0.2",
+    "version": "0.3",
     "title": "Power Pulse API docs",
     "description": "API documentation for project Power Pulse"
   },
@@ -41,6 +41,10 @@
     {
       "name": "Exercises",
       "description": "Info about exercises"
+    },
+    {
+      "name": "Statistic",
+      "description": "Statistic info"
     }
   ],
 
@@ -67,7 +71,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserInfoWithTokenResponse"
+                  "$ref": "#/components/schemas/UserFullInfoResponse"
                 }
               }
             }
@@ -103,7 +107,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserInfoWithTokenResponse"
+                  "$ref": "#/components/schemas/UserFullInfoResponse"
                 }
               }
             }
@@ -152,7 +156,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserInfoWithTokenResponse"
+                  "$ref": "#/components/schemas/UserFullInfoResponse"
                 }
               }
             }
@@ -203,7 +207,6 @@
         }
       }
     },
-
     "/api/eaten-products": {
       "post": {
         "tags": ["Eaten products"],
@@ -360,7 +363,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "string"
+              "type": "date"
             }
           }
         ],
@@ -377,7 +380,7 @@
             }
           },
           "400": {
-            "description": "The passed id is not valid"
+            "description": "The date passed does not comply with the ISO 8601 date format"
           },
           "401": {
             "description": "Not authorized"
@@ -389,7 +392,48 @@
       "get": {
         "tags": ["Products"],
         "summary": "Info about products",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "category",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recommended",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -401,9 +445,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "The passed id is not valid"
           },
           "401": {
             "description": "Not authorized"
@@ -428,8 +469,72 @@
               }
             }
           },
-          "400": {
-            "description": "The passed id is not valid"
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      }
+    },
+    "api/exercises": {
+      "get": {
+        "tags": ["Exercises"],
+        "summary": "Info about exercises",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "bodyPart",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "equipment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "target",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercises"
+                }
+              }
+            }
           },
           "401": {
             "description": "Not authorized"
@@ -437,25 +542,65 @@
         }
       }
     },
-
-    "api/exercises": {
+    "/api/exercise-categories": {
       "get": {
-        "tags": ["Exercises"]
+        "tags": ["Exercises"],
+        "summary": "Info about exercise categories",
+        "parameters": [
+          {
+            "name": "category",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExerciseCategories"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
       }
     },
-    "api/bodyParts": {
+    "/api/statistic": {
       "get": {
-        "tags": ["Exercises"]
-      }
-    },
-    "api/muscules": {
-      "get": {
-        "tags": ["Exercises"]
-      }
-    },
-    "api/equipments": {
-      "get": {
-        "tags": ["Exercises"]
+        "tags": ["Statistic"],
+        "summary": "Statistic info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Statistic"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Users or exercises not found"
+          }
+        }
       }
     }
   },
@@ -532,7 +677,7 @@
                 "example": 80
               },
               "birthdate": {
-                "type": "string",
+                "type": "date",
                 "description": "User's date of birth",
                 "example": "1985-09-17T15:47:57.302+00:00"
               },
@@ -580,7 +725,7 @@
           }
         }
       },
-      "UserInfoWithTokenResponse": {
+      "UserFullInfoResponse": {
         "type": "object",
         "properties": {
           "user": {
@@ -601,6 +746,11 @@
                 "description": "User's avatar URL",
                 "example": "https://gravatar.com/avatar/c30d6c14569650b95a78e33e5013683e"
               },
+              "createdAt": {
+                "type": "date",
+                "description": "Date of creating user account",
+                "example": "2023-09-14T16:49:57.988+00:00"
+              },
               "bodyParams": {
                 "type": "object",
                 "properties": {
@@ -620,7 +770,7 @@
                     "example": 80
                   },
                   "birthdate": {
-                    "type": "string",
+                    "type": "date",
                     "description": "User's date of birth",
                     "example": "1985-09-17T15:47:57.302+00:00"
                   },
@@ -705,7 +855,7 @@
                     "example": 80
                   },
                   "birthdate": {
-                    "type": "string",
+                    "type": "date",
                     "description": "User's date of birth",
                     "example": "1985-09-17T15:47:57.302+00:00"
                   },
@@ -749,7 +899,6 @@
         "type": "string",
         "example": "No Content"
       },
-
       "AddEatenProductRequest": {
         "type": "object",
         "required": ["productId", "weight", "date"],
@@ -765,7 +914,7 @@
             "example": 300
           },
           "date": {
-            "type": "string",
+            "type": "date",
             "description": "Date when the product was eaten",
             "example": "2023-09-19T11:43:11.790+00:00"
           }
@@ -806,7 +955,7 @@
             "example": 30
           },
           "date": {
-            "type": "string",
+            "type": "date",
             "description": "Date when the exercise was completed",
             "example": "2023-09-19T11:43:11.790+00:00"
           }
@@ -943,7 +1092,7 @@
                     },
                     "gifUrl": {
                       "type": "string",
-                      "description": "How to do execise",
+                      "description": "GIF URL - how to do exercise",
                       "example": "https://res.cloudinary.com/ditdqzoio/image/upload/v1687127066/exercises/0001.gif"
                     },
                     "name": {
@@ -1109,6 +1258,165 @@
         },
         "example": {
           "categories": ["alcoholic drinks", "berries", "cereals"]
+        }
+      },
+      "Exercises": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "number",
+            "description": "Total number of exercises",
+            "example": 1318
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Id of exercise",
+                  "example": "6503194aa1c682f0d6a5ce3b"
+                },
+                "bodyPart": {
+                  "type": "number",
+                  "description": "Part of body",
+                  "example": "waist"
+                },
+                "equipment": {
+                  "type": "number",
+                  "description": "Equipment",
+                  "example": "body weight"
+                },
+                "gifUrl": {
+                  "type": "string",
+                  "description": "GIF URL - how to do exercise",
+                  "example": "https://res.cloudinary.com/ditdqzoio/image/upload/v1687127066/exercises/0001.gif"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of exercise",
+                  "example": "3/4 sit-up"
+                },
+                "target": {
+                  "type": "string",
+                  "description": "Target",
+                  "example": "abs"
+                },
+                "burnedCalories": {
+                  "type": "number",
+                  "description": "Calories burned during this exercise time",
+                  "example": 220
+                },
+                "time": {
+                  "type": "number",
+                  "description": "Time of completing the exercise",
+                  "example": 3
+                }
+              }
+            }
+          }
+        },
+
+        "example": {
+          "totalCount": 2,
+          "exercises": [
+            {
+              "_id": "6503194aa1c682f0d6a5ce3n",
+              "bodyPart": "waist",
+              "equipment": "body weight",
+              "example": "https://res.cloudinary.com/ditdqzoio/image/upload/v1687127066/exercises/0001.gif",
+              "name": "3/4 sit-up",
+              "target": "abs",
+              "burnedCalories": 220,
+              "time": 3
+            },
+            {
+              "_id": "6503194aa1c682f0d6a5ce3k",
+              "bodyPart": "waist",
+              "equipment": "body weight",
+              "example": "https://res.cloudinary.com/ditdqzoio/image/upload/v1687127066/exercises/0002.gif",
+              "name": "45° side bend",
+              "target": "abs",
+              "burnedCalories": 323,
+              "time": 3
+            }
+          ]
+        }
+      },
+      "ExerciseCategories": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "number",
+            "description": "Total number of exercise categories",
+            "example": 10
+          },
+          "exerciseCategories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Id of category",
+                  "example": "1234567qw"
+                },
+                "filter": {
+                  "type": "string",
+                  "description": "Name of category",
+                  "example": "Body parts"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of subcategory",
+                  "example": "cardio"
+                },
+                "imgURL": {
+                  "type": "string",
+                  "description": "Image URL of subcategory",
+                  "example": "https://example.com/example-1.jpg"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "totalCount": 2,
+          "exerciseCategories": [
+            {
+              "_id": "1234567qw",
+              "filter": "Body parts",
+              "name": "back",
+              "imgURL": "https://example.com/example-1.jpg"
+            },
+            {
+              "_id": "1234567qr",
+              "filter": "Body parts",
+              "name": "cardio",
+              "imgURL": "https://example.com/example-2.jpg"
+            }
+          ]
+        }
+      },
+      "Statistic": {
+        "type": "object",
+        "properties": {
+          "totalUsersCount": {
+            "type": "number",
+            "description": "Total number of users",
+            "example": 57
+          },
+          "totalExercisesCount": {
+            "type": "number",
+            "description": "Total number of exercises",
+            "example": 234
+          },
+          "totalExercisesDuration": {
+            "type": "number",
+            "description": "Total number of exercise duration",
+            "example": 457
+          }
         }
       }
     },

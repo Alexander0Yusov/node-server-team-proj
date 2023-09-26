@@ -478,7 +478,7 @@
         }
       }
     },
-    "api/exercises": {
+    "/api/exercises": {
       "get": {
         "tags": ["Exercises"],
         "summary": "Info about exercises",

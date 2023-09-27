@@ -5,10 +5,10 @@ const cloudinary = require('cloudinary').v2;
 const exersSorce = require('../temp/exercises.json');
 // const filtersSorce = require('../temp/filters.json');
 
-const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUD_NAME } = process.env;
 
 cloudinary.config({
-  cloud_name: 'dwgi8qlph',
+  cloud_name: CLOUD_NAME,
   api_key: CLOUDINARY_API_KEY,
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,

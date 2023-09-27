@@ -4,47 +4,21 @@ const calcBmr = ({ desiredWeight, height, birthdate, levelActivity, sex }) => {
 
   const years = currentDate.getFullYear() - birthdateObject.getFullYear();
 
-  let sexValue;
-  let result;
+  const SEX = {
+    male: 5,
+    female: -161,
+  };
+  const LEVEL_ACTIVITY_VALUE = {
+    1: 1.2,
+    2: 1.375,
+    3: 1.55,
+    4: 1.725,
+    5: 1.9,
+  };
 
-  switch (sex) {
-    case 'male':
-      sexValue = 5;
-      break;
-    case 'female':
-      sexValue = -161;
-      break;
-
-    default:
-      break;
-  }
-
-  switch (levelActivity) {
-    case 1:
-      result =
-        (10 * desiredWeight + 6.25 * height - 5 * years + sexValue) * 1.2;
-      break;
-    case 2:
-      result =
-        (10 * desiredWeight + 6.25 * height - 5 * years + sexValue) * 1.375;
-      break;
-    case 3:
-      result =
-        (10 * desiredWeight + 6.25 * height - 5 * years + sexValue) * 1.55;
-      break;
-    case 4:
-      result =
-        (10 * desiredWeight + 6.25 * height - 5 * years + sexValue) * 1.725;
-      break;
-    case 5:
-      result =
-        (10 * desiredWeight + 6.25 * height - 5 * years + sexValue) * 1.9;
-      break;
-
-    default:
-      result = 1;
-      break;
-  }
+  const result =
+    (10 * desiredWeight + 6.25 * height - 5 * years + SEX[sex]) *
+    LEVEL_ACTIVITY_VALUE[levelActivity];
 
   return Math.round(result / 10) * 10;
 };

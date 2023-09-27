@@ -13,10 +13,11 @@ const {
   isDefaultParams,
 } = require('../helpers');
 const { User } = require('../models/user');
-const { SECRET_KEY, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+const { SECRET_KEY, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUD_NAME } =
+  process.env;
 
 cloudinary.config({
-  cloud_name: 'dwgi8qlph',
+  cloud_name: CLOUD_NAME,
   api_key: CLOUDINARY_API_KEY,
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
@@ -124,12 +125,20 @@ const getCurrent = async (req, res) => {
 };
 
 const patchUser = async (req, res) => {
-  const { _id, bodyParams: prevBodyParams } = req.user;
+  const { _id, email, bodyParams: prevBodyParams } = req.user;
 
-  const { name, email, bodyParams: incomingBodyParams } = req.body;
+  const {
+    name,
+    email: incomingEmail,
+    bodyParams: incomingBodyParams,
+  } = req.body;
 
-  if ((name || email || incomingBodyParams || req.file) === undefined) {
+  if ((name || incomingEmail || incomingBodyParams || req.file) === undefined) {
     throw HttpError(400, 'missing fields');
+  }
+
+  if (email !== incomingEmail) {
+    throw HttpError(401, 'Email editing is not possible');
   }
 
   let userData = null;

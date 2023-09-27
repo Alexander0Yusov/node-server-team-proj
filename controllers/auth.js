@@ -137,7 +137,7 @@ const patchUser = async (req, res) => {
     throw HttpError(400, 'missing fields');
   }
 
-  if (email !== incomingEmail) {
+  if (incomingEmail && email !== incomingEmail) {
     throw HttpError(401, 'Email editing is not possible');
   }
 

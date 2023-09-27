@@ -11,13 +11,6 @@ router.post('/logout', authenticate, ctrl.logout);
 router.get('/current', authenticate, ctrl.getCurrent);
 
 router.patch(
-  '/avatars',
-  authenticate,
-  upload.single('avatar'),
-  ctrl.updateAvatar
-);
-
-router.patch(
   '/current',
   authenticate,
   validateBody(schemas.updateUserSchema),

@@ -123,36 +123,6 @@ const getCurrent = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-
-  if (!_id) {
-    throw HttpError(401);
-  }
-  const { path: tempDir } = req.file;
-
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  };
-
-  try {
-    const result = await cloudinary.uploader.upload(tempDir, options);
-    const avatarURL = result.secure_url;
-
-    await User.findByIdAndUpdate(_id, { avatarURL });
-
-    return avatarURL;
-  } catch (error) {
-    console.error(error);
-  }
-
-  res.json({
-    avatarURL,
-  });
-};
-
 const patchUser = async (req, res) => {
   const { _id, bodyParams: prevBodyParams } = req.user;
 
@@ -231,6 +201,5 @@ module.exports = {
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
-  updateAvatar: ctrlWrapper(updateAvatar),
   patchUser: ctrlWrapper(patchUser),
 };

@@ -1,29 +1,18 @@
 const logger = require('morgan');
-// const useSocket = require('socket.io');
 const express = require('express');
 const app = express();
 const cors = require('cors');
-// const server = require('http').Server(app);
 const swaggerUi = require('swagger-ui-express');
+
 const swaggerDocument = require('./swagger.json');
 const authRouter = require('./routes/api/auth');
 const eatenProductRouter = require('./routes/api/eatenProducts');
+const doneExercisesRouter = require('./routes/api/doneExercises');
 const diariesRouter = require('./routes/api/diaries');
 const productsRouter = require('./routes/api/products');
 const exercisesRouter = require('./routes/api/exercises');
 const exerciseCategoriesRouter = require('./routes/api/exerciseCategories');
 const statisticRoute = require('./routes/api/statistic');
-
-const messageRouter = require('./routes/api/message');
-const doneExercisesRouter = require('./routes/api/doneExercises');
-
-// const { addUser, findUser, getRoomsUsers, removeUser } = require('./users');
-
-// const io = useSocket(server, {
-//   cors: {
-//     origin: '*',
-//   },
-// });
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -41,8 +30,6 @@ app.use('/api/exercises', exercisesRouter);
 app.use('/api/exercise-categories', exerciseCategoriesRouter);
 app.use('/api/statistic', statisticRoute);
 
-app.use('/api/messages', messageRouter);
-
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
@@ -52,45 +39,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-// io.on('connection', socket => {
-//   socket.on('join', ({ name, room, avatar }) => {
-//     socket.join(room);
-
-//     const { user } = addUser({ name, room, avatar });
-
-//     io.to(user.room).emit('room', {
-//       data: {
-//         room: user.room,
-//         users: getRoomsUsers(user.room),
-//       },
-//     });
-//   });
-
-//   socket.on('send', ({ message, params }) => {
-//     const user = findUser(params);
-
-//     if (user) {
-//       io.to(user.room).emit('message', {
-//         data: { user, message },
-//       });
-//     }
-//   });
-
-//   socket.on('leftRoom', ({ params }) => {
-//     const user = removeUser(params);
-
-//     if (user) {
-//       io.to(user.room).emit('room', {
-//         data: {
-//           room: user.room,
-//           users: getRoomsUsers(user.room),
-//         },
-//       });
-//     }
-//   });
-
-//   socket.on('disconnect', () => console.log('Disconnect'));
-// });
-
-// module.exports = server;
 module.exports = app;

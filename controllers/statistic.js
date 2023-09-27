@@ -2,7 +2,7 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 const { User } = require('../models/user');
 const { DoneExercise } = require('../models/doneExercise');
 
-const getAllUsers = async (req, res) => {
+const getStatistic = async (req, res) => {
   const allUsersCountPromise = User.countDocuments({});
   const allExercisesCountPromise = DoneExercise.countDocuments({});
   const allExercisesMinutesPromise = DoneExercise.aggregate([
@@ -29,7 +29,7 @@ const getAllUsers = async (req, res) => {
 };
 
 module.exports = {
-  getAllUsers: ctrlWrapper(getAllUsers),
+  getStatistic: ctrlWrapper(getStatistic),
 };
 
 // Створити публічний ендпоінт, який повертає інформацію щодо

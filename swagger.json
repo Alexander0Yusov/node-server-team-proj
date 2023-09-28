@@ -174,14 +174,9 @@
           "description": "User's new info",
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchCurrentUserRequest"
-              }
-            },
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PatchCurrentUserAvatarRequest"
+                "$ref": "#/components/schemas/PatchCurrentUserRequest"
               }
             }
           }
@@ -735,6 +730,11 @@
       "PatchCurrentUserRequest": {
         "type": "object",
         "properties": {
+          "avatar": {
+            "type": "string",
+            "description": "User's avatar file",
+            "format": "binary"
+          },
           "name": {
             "type": "string",
             "description": "User's name",
@@ -800,16 +800,6 @@
                 "example": false
               }
             }
-          }
-        }
-      },
-      "PatchCurrentUserAvatarRequest": {
-        "type": "object",
-        "properties": {
-          "fileName": {
-            "type": "string",
-            "description": "User's avatar file",
-            "format": "binary"
           }
         }
       },

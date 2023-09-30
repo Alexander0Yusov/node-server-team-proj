@@ -4,7 +4,7 @@ const calcBmr = ({ desiredWeight, height, birthdate, levelActivity, sex }) => {
 
   const years = currentDate.getFullYear() - birthdateObject.getFullYear();
 
-  const SEX = {
+  const SEX_VALUE = {
     male: 5,
     female: -161,
   };
@@ -17,7 +17,7 @@ const calcBmr = ({ desiredWeight, height, birthdate, levelActivity, sex }) => {
   };
 
   const result =
-    (10 * desiredWeight + 6.25 * height - 5 * years + SEX[sex]) *
+    (10 * desiredWeight + 6.25 * height - 5 * years + SEX_VALUE[sex]) *
     LEVEL_ACTIVITY_VALUE[levelActivity];
 
   return Math.round(result / 10) * 10;

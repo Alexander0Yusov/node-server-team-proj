@@ -174,14 +174,9 @@
           "description": "User's new info",
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchCurrentUserRequest"
-              }
-            },
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PatchCurrentUserAvatarRequest"
+                "$ref": "#/components/schemas/PatchCurrentUserRequest"
               }
             }
           }
@@ -225,7 +220,7 @@
           }
         },
         "responses": {
-          "204": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -242,7 +237,9 @@
             "description": "Not authorized"
           }
         }
-      },
+      }
+    },
+    "/api/eaten-products/{id}": {
       "delete": {
         "tags": ["Eaten products"],
         "summary": "Deletion of eaten product",
@@ -298,7 +295,7 @@
           }
         },
         "responses": {
-          "204": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -315,7 +312,9 @@
             "description": "Not authorized"
           }
         }
-      },
+      }
+    },
+    "/api/done-exercises/{id}": {
       "delete": {
         "tags": ["Done exercises"],
         "summary": "Deletion of done exercise",
@@ -411,15 +410,36 @@
           },
           {
             "name": "category",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "alcoholic drinks",
+                "berries",
+                "cereals",
+                "dairy",
+                "dried fruits",
+                "eggs",
+                "fish",
+                "flour",
+                "fruits",
+                "meat",
+                "mushrooms",
+                "nuts",
+                "oils and fats",
+                "poppy",
+                "sausage",
+                "seeds",
+                "sesame",
+                "soft drinks",
+                "vegetables and herbs"
+              ]
             }
           },
           {
             "name": "title",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "string"
@@ -427,7 +447,7 @@
           },
           {
             "name": "recommended",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "boolean"
@@ -501,26 +521,89 @@
           },
           {
             "name": "bodyPart",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "back",
+                "cardio",
+                "chest",
+                "lower arms",
+                "lower legs",
+                "neck",
+                "shoulders",
+                "upper arms",
+                "upper legs",
+                "waist"
+              ]
             }
           },
           {
             "name": "equipment",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "assisted",
+                "band",
+                "barbell",
+                "body weight",
+                "bosu ball",
+                "cable",
+                "dumbbell",
+                "elliptical machine",
+                "ez barbell",
+                "hammer",
+                "kettlebell",
+                "leverage machine",
+                "medicine ball",
+                "olympic barbell",
+                "resistance band",
+                "roller",
+                "rope",
+                "skierg machine",
+                "sled machine",
+                "smith machine",
+                "stability ball",
+                "stationary bike",
+                "stepmill machine",
+                "tire",
+                "trap bar",
+                "upper body ergometer",
+                "weighted",
+                "wheel roller"
+              ]
             }
           },
           {
             "name": "target",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "abductors",
+                "abs",
+                "adductors",
+                "biceps",
+                "calves",
+                "cardiovascular system",
+                "delts",
+                "forearms",
+                "glutes",
+                "hamstrings",
+                "lats",
+                "levator scapulae",
+                "pectorals",
+                "quads",
+                "serratus anterior",
+                "spine",
+                "traps",
+                "triceps",
+                "upper back"
+              ]
             }
           }
         ],
@@ -647,6 +730,11 @@
       "PatchCurrentUserRequest": {
         "type": "object",
         "properties": {
+          "avatar": {
+            "type": "string",
+            "description": "User's avatar file",
+            "format": "binary"
+          },
           "name": {
             "type": "string",
             "description": "User's name",
@@ -712,16 +800,6 @@
                 "example": false
               }
             }
-          }
-        }
-      },
-      "PatchCurrentUserAvatarRequest": {
-        "type": "object",
-        "properties": {
-          "fileName": {
-            "type": "string",
-            "description": "User's avatar file",
-            "format": "binary"
           }
         }
       },
